@@ -2,7 +2,7 @@ from datetime import date
 import uuid
 
 
-class informationsobjekt:
+class Informationsobjekt:
     def __init__(self, name: str, num: str, uuid: str, description: str, start: date = date.today(), end = None):
         self.name = name
         self.num = num
@@ -11,14 +11,20 @@ class informationsobjekt:
         self.end = end
         self.description = description
 
-class verksamhetsomrade(informationsobjekt):
+class Verksamhetsomrade(Informationsobjekt):
     def __init__(self, name: str, num: str, uuid: str, description: str, start = date.today(), end = None):
         super().__init__(name, num, uuid, description, start, end)
     
-class processgrupp(informationsobjekt):
-    def __init__(self, name: str, num: str, uuid: str, description: str, start = date.today(), end = None, verksamhetsomrade):
+class Processgrupp(Informationsobjekt):
+    def __init__(self, name: str, num: str, uuid: str, description: str, verksamhetsomrade: str, beskrivning: str, start: date = date.today(), end: date | None = None):
         super().__init__(name, num, uuid, description, start, end)
         self.verksamhetsomrade = verksamhetsomrade
+        self.beskrivning = beskrivning
 
+class Process(Informationsobjekt):
+    def __init__(self, name: str, num: str, uuid: str, description: str, processgrupp: str, beskrivning: str, forvaring: str, start: date = date.today(), end: date | None = None):
+        super().__init__(name, num, uuid, description, start, end)
+        self.processgrupp = processgrupp
+        self.beskrivning = beskrivning
 
 
