@@ -3,10 +3,10 @@ import uuid
 
 
 class Informationsobjekt:
-    def __init__(self, name: str, num: str, uuid: str, description: str, start: date = date.today(), end = None):
+    def __init__(self, name: str, num: str, description: str | None = None, start: date | None = None, end = None): 
         self.name = name
         self.num = num
-        self.id = uuid
+        # self.id = uuid
         self.start = start
         self.end = end
         self.description = description
@@ -14,29 +14,48 @@ class Informationsobjekt:
     def to_markdown(self):
         return informationsobjekt_to_markdown(self)
 
+    def __eq__(self, other):
+        if (
+                self.name == other.name
+                and self.num == other.num
+                # and self.id == other.id
+                and self.start == other.start
+                and self.end == other.end
+                and self.description == other.description
+                ):
+            return True
+        return False
 
 class Arkiv(Informationsobjekt):
-    def __init__(self, name: str, num: str, uuid: str, description: str, start = date.today(), end = None):
-        super().__init__(name, num, uuid, description, start, end)
+    def __init__(self, name: str, num: str, description: str | None = None, start = date.today(), end: date | None = None):
+        super().__init__(name, num, description, start, end)
 
 class Verksamhetsomrade(Informationsobjekt):
-    def __init__(self, name: str, num: str, uuid: str, description: str, arkiv: str,  start = date.today(), end = None):
-        super().__init__(name, num, uuid, description, start, end)
+    def __init__(self, name: str, num: str, description: str | None = None, arkiv: str | None = None, start: date | None = None, end: date | None = None):
+        super().__init__(name, num, description, start, end)
         self.arkiv = arkiv
 
+    def __eq__(self, other):
+        if (
+                self.name == other.name
+                and self.num == other.num
+                # and self.id == other.id
+                and self.start == other.start
+                and self.end == other.end
+                and self.description == other.description
+                ):
+            return True
+        return False
     
 class Processgrupp(Informationsobjekt):
-    def __init__(self, name: str, num: str, uuid: str, description: str, verksamhetsomrade: str, beskrivning: str, start: date = date.today(), end: date | None = None):
-        super().__init__(name, num, uuid, description, start, end)
+    def __init__(self, name: str, num: str, verksamhetsomrade: str, description: str | None = None, start: date = date.today(), end: date | None = None):
+        super().__init__(name, num, description, start, end)
         self.verksamhetsomrade = verksamhetsomrade
-        self.beskrivning = beskrivning
-
 
 class Process(Informationsobjekt):
-    def __init__(self, name: str, num: str, uuid: str, description: str, processgrupp: str, beskrivning: str, forvaring: str, start: date = date.today(), end: date | None = None):
-        super().__init__(name, num, uuid, description, start, end)
+    def __init__(self, name: str, num: str, processgrupp: str, forvaring: str, description: str | None = None, start: date = date.today(), end: date | None = None):
+        super().__init__(name, num, description, start, end)
         self.processgrupp = processgrupp
-        self.beskrivning = beskrivning
 
 
 def informationsobjekt_to_markdown(informationsobjekt):
@@ -56,7 +75,7 @@ def informationsobjekt_to_markdown(informationsobjekt):
     if informationsobjekt.start or informationsobjekt.end:
         md += "\n"
     if informationsobjekt.start:
-        md += " " + informationsobjekt.start.strftime('%Y%m%d') + " "
+        md += informationsobjekt.start.strftime('%Y-%m-%d') + " "
     if informationsobjekt.start or informationsobjekt.end:
         md += "-"
     if informationsobjekt.end:

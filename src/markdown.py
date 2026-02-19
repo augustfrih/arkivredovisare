@@ -14,6 +14,25 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
         
     #TODO split the markdown into informationsobjekt
 
+    verksamhetsomrade_list = []
+    processgrupp_list = []
+    process_list = []
+
+    markdown_split = markdown.split("\n")
+    
+    for line in markdown_split:
+        objekt = md_line_to_informationsobjekt(line)
+        match objekt:
+            case Verksamhetsomrade():
+                verksamhetsomrade_list.append(objekt)
+            case Processgrupp():
+                processgrupp_list.append(objekt)
+            case Process():
+                process_list.append(objekt)
+            case _:
+                pass
+
+
     #TODO create database file if not exists
 
     #TODO if database file exists, check that it is well formed
@@ -58,3 +77,12 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
 #
 # def informationsobjekt_till_header(informationsobjekt):
 #     if type(informationsobjekt) == 
+
+def md_line_to_informationsobjekt(line):
+    hashes, num, text = line.split(" ", 2)
+    if hashes == "#":
+        objekt = Verksamhetsomrade(text, num, "test", "test", end=None)
+    else:
+        print(f"{line} was not added to the db")
+        return
+    return objekt
