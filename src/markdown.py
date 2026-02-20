@@ -81,7 +81,7 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
 def md_line_to_informationsobjekt(line):
     hashes, num, text = line.split(" ", 2)
     if hashes == "#":
-        objekt = Verksamhetsomrade(text, num, "test", "test", end=None)
+        objekt = Verksamhetsomrade(text, num, end=None)
     else:
         print(f"{line} was not added to the db")
         return
