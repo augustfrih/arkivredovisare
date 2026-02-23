@@ -12,17 +12,17 @@ class testInformationsobjekt(unittest.TestCase):
         self.assertEqual(objekt1, objekt2)
 
     def test_verksamhetsomrade_to_md(self):
-        verksamhetsomrade = Verksamhetsomrade(name="Styrande", num=1, description="test", arkiv="test")
+        verksamhetsomrade = Verksamhetsomrade(name="Styrande", num=1)
         md = verksamhetsomrade.to_markdown()
         self.assertEqual(md, "# 1. Styrande\n" + date.today().strftime('%Y-%m-%d') + " -")
 
     def test_processgrupp_to_md(self):
-        processgrupp = Processgrupp(name="Styrande", verksamhetsomrade=1, num=1, description="test")
+        processgrupp = Processgrupp(name="Styrande", verksamhetsomrade=1, num=1)
         md = processgrupp.to_markdown()
         self.assertEqual(md, "## 1.1. Styrande\n" + date.today().strftime('%Y-%m-%d') + " -")
 
     def test_process_to_md(self):
-        process = Process(name="Styrande", verksamhetsomrade=1, processgrupp=1, num=1, description="test",  forvaring="test")
+        process = Process(name="Styrande", verksamhetsomrade=1, processgrupp=1, num=1) 
         md = process.to_markdown()
         self.assertEqual(md, "### 1.1.1. Styrande\n" + date.today().strftime('%Y-%m-%d') + " -")
 

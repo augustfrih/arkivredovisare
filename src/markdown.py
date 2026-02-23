@@ -80,8 +80,17 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
 
 def md_line_to_informationsobjekt(line):
     hashes, num, text = line.split(" ", 2)
+    if num.endswith("."):
+        num = num[:-1]
+
     if hashes == "#":
-        objekt = Verksamhetsomrade(text, num, end=None)
+        objekt = Verksamhetsomrade(text, int(num), end=None)
+    elif hashes == "##":
+        verksamhetsomrade, num = num.split(".")
+        objekt = Processgrupp(text, int(verksamhetsomrade), int(num))
+    elif hashes == "###":
+        verksamhetsomrade, processgrupp, num = num.split(".")
+        objekt = Process(name=text, verksamhetsomrade=int(verksamhetsomrade), processgrupp=int(processgrupp), num=int(num))
     else:
         print(f"{line} was not added to the db")
         return

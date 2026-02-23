@@ -56,10 +56,11 @@ class Processgrupp(Informationsobjekt):
         self.verksamhetsomrade = verksamhetsomrade
 
 class Process(Informationsobjekt):
-    def __init__(self, name: str, verksamhetsomrade: int, processgrupp: int, num: int, forvaring: str, description: str | None = None, start: date | None = None, end: date | None = None):
+    def __init__(self, name: str, verksamhetsomrade: int, processgrupp: int, num: int, forvaring: str | None = None, description: str | None = None, start: date | None = None, end: date | None = None):
         super().__init__(name, num, description, start, end)
         self.processgrupp = processgrupp
         self.verksamhetsomrade = verksamhetsomrade
+        self.forvaring = forvaring
 
 
 def informationsobjekt_to_markdown(informationsobjekt):
