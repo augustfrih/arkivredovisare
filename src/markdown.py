@@ -3,7 +3,10 @@ import sqlite3
 from globals import DATABASE_PATH, MARKDOWN_PATH
 from src.processtrad import Process, Processgrupp, Verksamhetsomrade
 
-def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdown_path: str = MARKDOWN_PATH):
+
+def markdown_till_informationsobjekt(
+        database_path: str = DATABASE_PATH, markdown_path: str = MARKDOWN_PATH
+        ):
     # Get absolute paths for markdown and database
     database_path = os.path.abspath(database_path)
     markdown_path = os.path.abspath(markdown_path)
@@ -11,15 +14,15 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
     # Put the markdown in a variable
     with open(markdown_path) as f:
         markdown = f.read()
-        
-    #TODO split the markdown into informationsobjekt
+
+    # TODO split the markdown into informationsobjekt
 
     verksamhetsomrade_list = []
     processgrupp_list = []
     process_list = []
 
     markdown_split = markdown.split("\n")
-    
+
     for line in markdown_split:
         objekt = md_line_to_informationsobjekt(line)
         match objekt:
@@ -32,15 +35,17 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
             case _:
                 pass
 
+    # create or connect to database
+    con = sqlite3.connect(database_path)
+    cur = con.cursor()
 
-    #TODO create database file if not exists
+    create_processtrad_table_if_not_exists(cur)
 
-    #TODO if database file exists, check that it is well formed
-
-    #TODO read the informationsobjekt to the tables
+    def __init__(self, name: str, num: int, description: str | None = None, arkiv: str | None = None, start: date | None = None, end: date | None = None):
+    # TODO read the informationsobjekt to the tables
 
     # Create this function
-    pass
+        pass
 
 # def sql_till_markdownfil(database=DATABASE_PATH, dest_path="arkivredovisning.md"):
 #     # Import all informationsobjekt from the database
@@ -67,18 +72,19 @@ def markdown_till_informationsobjekt(database_path: str = DATABASE_PATH, markdow
 #         markdown += "# " verkasmhetsomrade.num + " " + verkasmhetsomrade.name + "\n"
 #         for processgrupp in processgrupper:
 #             if processgrupp.num.startswith(verksamhetsomrade.num):
-#                 markdown += processgrupp.num + " " + 
+#                 markdown += processgrupp.num + " " +
 #
 #
 #
 #     abs_path = os.path.abspath("./content/" + dest_path)
-#     with open(abs_path, "w") as f: 
+#     with open(abs_path, "w") as f:
 #         _ = f.write(markdown)
 #
 # def informationsobjekt_till_header(informationsobjekt):
-#     if type(informationsobjekt) == 
+#     if type(informationsobjekt) ==
 
-def md_line_to_informationsobjekt(line):
+
+def md_line_to_informationsobjekt(line: str):
     hashes, num, text = line.split(" ", 2)
     if num.endswith("."):
         num = num[:-1]
@@ -95,3 +101,45 @@ def md_line_to_informationsobjekt(line):
         print(f"{line} was not added to the db")
         return
     return objekt
+
+def create_processtrad_table_if_not_exists(cur):
+
+    # create the veekshametsomrade table
+    create_verksamhetsomrade_command = """"
+    CREATE TABLE IF NOT EXISTS verksamhetsomrade (
+            num INT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            description VARCHAR(200),
+            arkiv VARCHAR(100),
+            start VARCHAR(100) NOT NULL,
+            end VARCHAR(100)
+            )
+    """
+
+    # create the processgrupp table
+    create_processgrupp_command = """"
+    CREATE TABLE IF NOT EXISTS processgrupp (
+            num INT PRIMARY KEY,
+            verksamhetsomrade INT NOT NULL,
+            name VARCHAR(100) NOT NULL,
+            description VARCHAR(200),
+            arkiv VARCHAR(100),
+            start VARCHAR(100) NOT NULL,
+            end VARCHAR(100)
+            )
+    """
+
+    # fill the veekshametsomrade table
+    create_verksamhetsomrade_command = """"
+    CREATE TABLE IF NOT EXISTS verksamhetsomrade (
+            num INT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            description VARCHAR(200),
+            forvaring VARCHAR(100)
+            arkiv VARCHAR(100),
+            start VARCHAR(100) NOT NULL,
+            end VARCHAR(100)
+            )
+    """
+
+    _ = cur.execute(create_verksamhetsomrade_command)

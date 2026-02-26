@@ -3,7 +3,8 @@ import uuid
 
 
 class Informationsobjekt:
-    def __init__(self, name: str, num: int, description: str | None = None, start: date | None = None, end = None): 
+    def __init__(self, name: str, num: int, description: str | None = None,
+                 start: date | None = None, end: date | None = None):
         self.name = name
         self.num = num
         # self.id = uuid
@@ -29,9 +30,11 @@ class Informationsobjekt:
             return True
         return False
 
+
 class Arkiv(Informationsobjekt):
     def __init__(self, name: str, num: int, description: str | None = None, start: date | None = None, end: date | None = None):
         super().__init__(name, num, description, start, end)
+
 
 class Verksamhetsomrade(Informationsobjekt):
     def __init__(self, name: str, num: int, description: str | None = None, arkiv: str | None = None, start: date | None = None, end: date | None = None):
@@ -49,11 +52,13 @@ class Verksamhetsomrade(Informationsobjekt):
                 ):
             return True
         return False
-    
+
+
 class Processgrupp(Informationsobjekt):
     def __init__(self, name: str, verksamhetsomrade: int, num: int, description: str | None = None, start: date | None = None, end: date | None = None):
         super().__init__(name, num, description, start, end)
         self.verksamhetsomrade = verksamhetsomrade
+
 
 class Process(Informationsobjekt):
     def __init__(self, name: str, verksamhetsomrade: int, processgrupp: int, num: int, forvaring: str | None = None, description: str | None = None, start: date | None = None, end: date | None = None):
@@ -84,6 +89,4 @@ def informationsobjekt_to_markdown(informationsobjekt):
         md += "-"
     if informationsobjekt.end:
         md += " " + informationsobjekt.end.strftime('%Y%m%d')
-            
-    return md 
-
+    return md
