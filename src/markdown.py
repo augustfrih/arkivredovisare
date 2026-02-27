@@ -41,11 +41,10 @@ def markdown_till_informationsobjekt(
 
     create_processtrad_table_if_not_exists(cur)
 
-    def __init__(self, name: str, num: int, description: str | None = None, arkiv: str | None = None, start: date | None = None, end: date | None = None):
     # TODO read the informationsobjekt to the tables
+    add_to_table(cur, verksamhetsomrade_list, processgrupp_list, process_list)
 
     # Create this function
-        pass
 
 # def sql_till_markdownfil(database=DATABASE_PATH, dest_path="arkivredovisning.md"):
 #     # Import all informationsobjekt from the database
@@ -104,8 +103,8 @@ def md_line_to_informationsobjekt(line: str):
 
 def create_processtrad_table_if_not_exists(cur):
 
-    # create the veekshametsomrade table
-    create_verksamhetsomrade_command = """"
+    # create the verkshametsomrade table
+    create_verksamhetsomrade_command = """
     CREATE TABLE IF NOT EXISTS verksamhetsomrade (
             num INT PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
@@ -117,7 +116,7 @@ def create_processtrad_table_if_not_exists(cur):
     """
 
     # create the processgrupp table
-    create_processgrupp_command = """"
+    create_processgrupp_command = """
     CREATE TABLE IF NOT EXISTS processgrupp (
             num INT PRIMARY KEY,
             verksamhetsomrade INT NOT NULL,
@@ -130,12 +129,12 @@ def create_processtrad_table_if_not_exists(cur):
     """
 
     # fill the veekshametsomrade table
-    create_verksamhetsomrade_command = """"
-    CREATE TABLE IF NOT EXISTS verksamhetsomrade (
+    create_process_command = """
+    CREATE TABLE IF NOT EXISTS process (
             num INT PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
             description VARCHAR(200),
-            forvaring VARCHAR(100)
+            forvaring VARCHAR(100),
             arkiv VARCHAR(100),
             start VARCHAR(100) NOT NULL,
             end VARCHAR(100)
@@ -143,3 +142,8 @@ def create_processtrad_table_if_not_exists(cur):
     """
 
     _ = cur.execute(create_verksamhetsomrade_command)
+    _ = cur.execute(create_processgrupp_command)
+    _ = cur.execute(create_process_command)
+
+def add_to_table(cursor, verksamhetsomrade_list, processgrupp_list, process_list):
+    pass
